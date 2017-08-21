@@ -91,25 +91,37 @@ public class CustomExceptionHandler {
 	
 	private void log2Admin(HttpServletRequest request, BaseException e){
 		//to log the different message ()
-		e.setUrl(request.getRequestURI());
+		
 //		logger.error(e.getDevLogString());
-		e.setStackTrace(DUMMY_ELEMENT);//remove the duplicate stacktrace, remain the ones in cause
+		//remove the duplicate stacktrace, remain the ones in cause
+		if(null != e){
+			e.setStackTrace(DUMMY_ELEMENT);
+			e.setUrl(request.getRequestURI());
+		}
 		logger.error(append("errorDetails", e), "log exception");
 	}
 
 	
 	private void log2Admin(HttpServletRequest request, Throwable e){
 		//to log the different message ()
-		e.setStackTrace(DUMMY_ELEMENT);//remove the duplicate stacktrace, remain the ones in cause
+		//remove the duplicate stacktrace, remain the ones in cause
+		if(null != e){
+			e.setStackTrace(DUMMY_ELEMENT);
+		}
 		logger.error(append("errorDetails", e), "log exception");
 	}
 	
 	private void log2User(HttpServletRequest request, BaseException e){
 		//to log the different message ()
 		//Don't need to log the stack trace and cause
-		e.setStackTrace(DUMMY_ELEMENT);
-		e.getCause().setStackTrace(DUMMY_ELEMENT);
-		e.setUrl(request.getRequestURI());
+		if(null != e){
+			e.setStackTrace(DUMMY_ELEMENT);
+			if(e.getCause() != null){
+				e.getCause().setStackTrace(DUMMY_ELEMENT);
+			}
+			e.setUrl(request.getRequestURI());
+		}
 		logger.warn(append("warningDetails", e), "log warning");
+		
 	}
 }

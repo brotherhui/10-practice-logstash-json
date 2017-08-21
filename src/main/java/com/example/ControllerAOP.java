@@ -74,15 +74,10 @@ public class ControllerAOP {
 		logMarker.and(append("CLASS", pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName()));
 		logMarker.and(append("METHOD", request.getMethod()));
 		logMarker.and(append("ARGS", Arrays.toString(pjp.getArgs())));
-
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
-			Stopwatch stopwatch = Stopwatch.createStarted();
 			result = pjp.proceed(pjp.getArgs());
-			stopwatch.stop();
 			logMarker.and(append("status", STATUS_COMPLETED));
-			long executeTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-			logMarker.and(append("executeTime", executeTime + "ms"));
-			gaugeService.submit("timer." + methodName, executeTime);
 		} catch (BaseException ex) {
 			BaseException exception = (BaseException) ex;
 			String errorCode = exception.getCode();
@@ -97,6 +92,10 @@ public class ControllerAOP {
 			logMarker.and(append("reason", ex.getMessage()));
 			throw ex;
 		} finally {
+			stopwatch.stop();
+			long executeTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+			logMarker.and(append("executeTime", executeTime + "ms"));
+			gaugeService.submit("timer." + methodName, executeTime);
 			logger.info(logMarker, "log controller");
 		}
 		return result;
