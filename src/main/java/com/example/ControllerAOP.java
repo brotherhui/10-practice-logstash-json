@@ -97,7 +97,7 @@ public class ControllerAOP {
 			logMarker.and(append("reason", ex.getMessage()));
 			throw ex;
 		} finally {
-			logger.info(logMarker, "log controller ");
+			logger.info(logMarker, "log controller");
 		}
 		return result;
 	}
