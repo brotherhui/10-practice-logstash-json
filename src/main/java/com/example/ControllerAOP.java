@@ -75,7 +75,6 @@ public class ControllerAOP {
 		logMarker.and(append("METHOD", request.getMethod()));
 		logMarker.and(append("ARGS", Arrays.toString(pjp.getArgs())));
 
-		
 		try {
 			Stopwatch stopwatch = Stopwatch.createStarted();
 			result = pjp.proceed(pjp.getArgs());
@@ -88,7 +87,6 @@ public class ControllerAOP {
 			BaseException exception = (BaseException) ex;
 			String errorCode = exception.getCode();
 			String reason = exception.getMessage();
-
 			logMarker.and(append("status", STATUS_FAILED));
 			logMarker.and(append("errorCode", errorCode));
 			logMarker.and(append("reason", reason));
@@ -99,7 +97,7 @@ public class ControllerAOP {
 			logMarker.and(append("reason", ex.getMessage()));
 			throw ex;
 		} finally {
-			logger.info(logMarker, "log message");
+			logger.info(logMarker, "log controller ");
 		}
 		return result;
 	}

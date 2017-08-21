@@ -24,12 +24,14 @@ public class CustomExceptionHandler {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	private static StackTraceElement[] DUMMY_ELEMENT = new StackTraceElement[0];
+	
 	@ExceptionHandler(value = BusinessException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResponseObject doexc(HttpServletRequest request, BusinessException e) throws Exception {
 		
 		ResponseObject body = new ResponseObject(request.getRequestURI(),e.getCode(),e.getMessage());
-		log2Admin(request, e);
+		log2User(request, e);
 		return body;
 	}
 
@@ -38,7 +40,7 @@ public class CustomExceptionHandler {
 	public ResponseObject handleNotFound(HttpServletRequest request, DataNotFoundException e) throws Exception {
 		
 		ResponseObject body = new ResponseObject(request.getRequestURI(),e.getCode(),e.getMessage());
-		log2Admin(request, e);
+		log2User(request, e);
 		return body;
 	}
 	
@@ -47,7 +49,7 @@ public class CustomExceptionHandler {
 	public ResponseObject handleNotFound(HttpServletRequest request, DataDuplicateException e) throws Exception {
 		
 		ResponseObject body = new ResponseObject(request.getRequestURI(),e.getCode(),e.getMessage());
-		log2Admin(request, e);
+		log2User(request, e);
 		return body;
 	}
 	
@@ -56,7 +58,7 @@ public class CustomExceptionHandler {
 	public ResponseObject handleNotFound(HttpServletRequest request, ParameterException e) throws Exception {
 		
 		ResponseObject body = new ResponseObject(request.getRequestURI(),e.getCode(),e.getMessage());
-		log2Admin(request, e);
+		log2User(request, e);
 		return body;
 	}
 	
@@ -91,12 +93,23 @@ public class CustomExceptionHandler {
 		//to log the different message ()
 		e.setUrl(request.getRequestURI());
 //		logger.error(e.getDevLogString());
-		logger.error(append("exceptionDetails", e), "log exception");
+		e.setStackTrace(DUMMY_ELEMENT);//remove the duplicate stacktrace, remain the ones in cause
+		logger.error(append("errorDetails", e), "log exception");
 	}
 
 	
 	private void log2Admin(HttpServletRequest request, Throwable e){
 		//to log the different message ()
-
+		e.setStackTrace(DUMMY_ELEMENT);//remove the duplicate stacktrace, remain the ones in cause
+		logger.error(append("errorDetails", e), "log exception");
+	}
+	
+	private void log2User(HttpServletRequest request, BaseException e){
+		//to log the different message ()
+		//Don't need to log the stack trace and cause
+		e.setStackTrace(DUMMY_ELEMENT);
+		e.getCause().setStackTrace(DUMMY_ELEMENT);
+		e.setUrl(request.getRequestURI());
+		logger.warn(append("warningDetails", e), "log warning");
 	}
 }

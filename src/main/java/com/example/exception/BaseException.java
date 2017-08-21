@@ -92,52 +92,54 @@ public class BaseException extends RuntimeException{
 		this.additionalInfos.put(key, value);
 	}	
 	
-	public String getDevLogString() {
-		StringBuilder sb = new StringBuilder();
 
-		if (cause != null) {
-			sb.append(String.format("1. Cause:    %n"));
-			sb.append(String.format("	class:    %s%n", cause.getClass()
-					.getName()));
-			sb.append(String.format("	trace:  %s%n", cause.getStackTrace()));
-		}
-
-		if (code != null) {
-			sb.append(String.format("2. Code: %s%n", code));
-		}
-		
-		if (message != null) {
-			sb.append(String.format("3. Message: %s%n", message));
-		}
-		
-		if (url != null) {
-			sb.append(String.format("4. Url:  %s%n",
-					url));
-		}
-		
-		if (errorContext != null) {
-			sb.append(String.format("5. errorContext:      %s%n",
-					errorContext));
-		}
-		
-		if (errorDescription != null) {
-			sb.append(String.format("6. ErrorDescription:      %s%n",
-					errorDescription));
-		}
-		if (errorCorrection != null) {
-			sb.append(String.format("7. ErrorCorrection:       %s%n",
-					errorCorrection));
-		}
-		if (!additionalInfos.isEmpty()) {
-			sb.append(String.format("8. AddtionalInfos:%n"));
-			for (String s : additionalInfos.keySet()) {
-				String v = additionalInfos.get(s).toString();
-				sb.append(String.format("    name=[%s] value=[%s]%n", s, v));
-			}
-		}
-
-		return sb.toString();
-	}
+	
+//	public String getDevLogString() {
+//		StringBuilder sb = new StringBuilder();
+//
+//		if (cause != null) {
+//			sb.append(String.format("1. Cause:    %n"));
+//			sb.append(String.format("	class:    %s%n", cause.getClass()
+//					.getName()));
+//			sb.append(String.format("	trace:  %s%n", cause.getStackTrace()));
+//		}
+//
+//		if (code != null) {
+//			sb.append(String.format("2. Code: %s%n", code));
+//		}
+//		
+//		if (message != null) {
+//			sb.append(String.format("3. Message: %s%n", message));
+//		}
+//		
+//		if (url != null) {
+//			sb.append(String.format("4. Url:  %s%n",
+//					url));
+//		}
+//		
+//		if (errorContext != null) {
+//			sb.append(String.format("5. errorContext:      %s%n",
+//					errorContext));
+//		}
+//		
+//		if (errorDescription != null) {
+//			sb.append(String.format("6. ErrorDescription:      %s%n",
+//					errorDescription));
+//		}
+//		if (errorCorrection != null) {
+//			sb.append(String.format("7. ErrorCorrection:       %s%n",
+//					errorCorrection));
+//		}
+//		if (!additionalInfos.isEmpty()) {
+//			sb.append(String.format("8. AddtionalInfos:%n"));
+//			for (String s : additionalInfos.keySet()) {
+//				String v = additionalInfos.get(s).toString();
+//				sb.append(String.format("    name=[%s] value=[%s]%n", s, v));
+//			}
+//		}
+//
+//		return sb.toString();
+//	}
 	
 	
 	

@@ -9,6 +9,15 @@
             <encoder class="net.logstash.logback.encoder.LogstashEncoder" >
                 <!-- after add below parts, it will increase the default fields of json and the ${URL} is undefined -->
             	<!-- <customFields>{"URL":"${URL}","METHOD":"${METHOD}"}</customFields> -->
+            	  <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+				    <maxDepthPerThrowable>10</maxDepthPerThrowable>
+				    <maxLength>2048</maxLength>
+				    <shortenedClassNameLength>20</shortenedClassNameLength>
+				    <exclude>sun\.reflect\..*\.invoke.*</exclude>
+				    <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+				    <rootCauseFirst>true</rootCauseFirst>
+				    <inlineHash>true</inlineHash>
+				  </throwableConverter>
             </encoder>
         </appender>
         <root level="INFO">
