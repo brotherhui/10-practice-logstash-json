@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="!k8s">
+        <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+        <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+                <!-- after add below parts, it will increase the default fields of json and the ${URL} is undefined -->
+            	<!-- <customFields>{"URL":"${URL}","METHOD":"${METHOD}"}</customFields> -->
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.example" level="INFO"/>
+    </springProfile>
+    <springProfile name="k8s">
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>   
+		      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>   
+		    </encoder>
+        </appender>
+        <root level="WARN">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.example" level="INFO"/>
+    </springProfile>
+
+</configuration>
